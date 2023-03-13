@@ -1,0 +1,165 @@
+<html>
+    <head>
+        <title>
+            User Login System
+        </title>
+    </head>
+     <body>
+        
+        <form name="regForm">
+            <a>username</a>
+                <input type="text" name="userName" required>
+                <p id="usernameChecker"></p>
+            </br>
+            </br>
+                <a>password</a>
+                <input type="password" id="password" required>
+                <p id="passwordChecker"></p>
+
+            </br>
+            </br>
+                <a>email</a>
+                <input type="text" name="userMail" required>
+                <p id="emailChecker"></p>
+                
+            </br>
+            </br>
+                <a>location</a>
+                <input type="text" id="userLocation" required>
+                <p id="locationChecker"></p>
+            </br>
+            </br>
+                <button id="submitButton" type="submit">Submit</button>
+                <p id="loginChecker"></p>
+        </form>
+
+        <script type="text/javascript">
+            function signUpToSystem() {
+            const inputUserName = document.getElementById("userName");
+            const inputPassword = document.getElementById("password");
+            const inputEmail = document.getElementById("userMail");
+            const inputLocation = document.getElementById("userLocation");
+            
+            const oldLocalDatabaseContent = localStorage.getItem("userCredentials")
+            const newLocalDatabase = []
+            newLocalDatabase.push(...JSON.parse(oldLocalDatabaseContent))
+
+            newLocalDatabase.push({
+                "username": inputUserName.value,
+                "password": inputPassword.value,
+                "email": inputEmail.value,
+                "location": inputLocation.value
+            })
+            // This action is known as upsert in programming so we are upserting new data to the old data
+
+            if (inputUserName.value.length === 0) {
+                inputUserName.style.border = "1px solid";
+                inputUserName.style.borderColor = "red";
+                const usernameChecker = document.getElementById("usernameChecker")
+                usernameChecker.innerHTML = "This field is required"
+            }
+            else if (inputPassword.value.length === 0) {
+                inputPassword.style.border = "1px solid";
+                inputPassword.style.borderColor = "red";
+                passwordChecker.innerHTML = "This field is required"
+
+            }
+            else if (inputEmail.value.length === 0) {
+                inputEmail.style.border = "1px solid";
+                inputEmail.style.borderColor = "red";
+                emailChecker.innerHTML = "This field is required"
+
+            }
+            else if (inputLocation.value.length === 0) {
+                inputLocation.style.border = "1px solid";
+                inputLocation.style.borderColor = "red";
+                locationChecker.innerHTML = "This field is required"
+
+            }
+            else {
+                localStorage.setItem("userCredentials", JSON.stringify(newLocalDatabase))
+            }
+            
+            // localStorage.setItem("username", inputUserName)
+            // localStorage.setItem("password", inputPassword)
+            // localStorage.setItem("email", inputEmail)
+            // localStorage.setItem("location", inputLocation)
+            }
+            
+            const getRanHex = size => {
+                let result = [];
+                let hexRef = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+            
+                for (let n = 0; n < size; n++) {
+                result.push(hexRef[Math.floor(Math.random() * 16)]);
+                }
+                return result.join('');
+            }
+
+            const form = document.forms["regForm"];
+            
+            form.addEventListener("input", (event) => {
+                event.preventDefault();
+                if (event.target.name === "userName") {
+                    if (!(/^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/).test(event.target.value)) {
+                        document.getElementById("usernameChecker").innerHTML = "Error: username is in incorrect format!"
+                        event.target.style.border = "1px solid red";
+                        document.getElementById("submitButton").disabled = true;
+                        return false;
+                    } else {
+                        document.getElementById("usernameChecker").innerHTML = ""
+                        event.target.style.border = "1px solid green";
+                        document.getElementById("submitButton").disabled = false;
+                    }
+                }
+            });
+
+            form.addEventListener("submit", (event) => {
+                event.preventDefault();
+                submitHandler(form);
+                form.reset();
+            });
+
+            function submitHandler(form){
+                let username = form["userName"].value;
+                let userMail = form["userMail"].value;
+
+                if (!(/^[A-Za-z][A-Za-z0-9_]/).test(username)) {
+                    document.getElementById("usernameChecker").innerHTML = "Error: username is in incorrect format!"
+                    return false;
+                }
+                if (userMail === "") {
+                    document.getElementById("emailChecker").innerHTML = "Error: email field is required!"
+                } else if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(userMail)) {
+                    document.getElementById("emailChecker").innerHTML = "Error: email is in incorrect format!"
+                    return false;
+                }
+
+                const inputUserName = form["userName"].value;
+                const inputPassword = form["password"].value;
+                const inputEmail = form["userMail"].value;
+                const inputLocation = form["userLocation"].value; 
+                
+                const oldLocalDatabaseContent = localStorage.getItem("userCredentials")
+
+                let newLocalDatabase = []
+
+                if (oldLocalDatabaseContent !== null) {
+                    newLocalDatabase.push(...JSON.parse(oldLocalDatabaseContent))
+                }
+                const userTokenData = getRanHex(64);
+                newLocalDatabase.push({
+                    "username": inputUserName,
+                    "password": inputPassword,
+                    "email": inputEmail,
+                    "location": inputLocation,
+                    "sessionToken": userTokenData
+                })
+
+            localStorage.setItem("userCredentials", JSON.stringify(newLocalDatabase))
+            localStorage.setItem("sessionToken", JSON.stringify(userTokenData))
+            window.location.href = "./home.html";
+            }
+        </script>
+     </body>
+</html>

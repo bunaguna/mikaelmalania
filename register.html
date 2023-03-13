@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>
+            User Register System
+        </title>
+    </head>
+     <body>
+        
+        <script type="text/javascript">
+            function registerInSystem() {
+            const inputUserName = document.getElementById("userName").value;
+            const inputPassword = document.getElementById("password").value;
+            
+            if (inputUserName.length === 0 || inputPassword.length === 0) {
+                // document.getElementById("userName").style.border("1px solid #FF244E")
+                // document.getElementById("password").style.border("1px solid #FF244E")
+                document.getElementById("inputChecker").innerHTML = "Please input required fields to continue!"
+                document.getElementById("inputChecker").style.fontSize("10px")
+
+            }
+            localStorage.setItem("userCredentials", JSON.stringify([{"username": inputUserName, "password":inputPassword}]))
+
+        }
+
+        </script>
+    </body>
+</html>

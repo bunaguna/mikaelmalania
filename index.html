@@ -1,0 +1,42 @@
+<html>
+    <head></head>
+    <body>
+        <div id="homePage">
+            <h1>
+                Welcome To home Page you have successfully registered in the system
+            </h1>
+            <p id="username" style="display: none;"></p>
+            <p id="location" style="display: none;"></p>
+            <p id="birthDate" style="display: none;"></p>
+            <button id="signOut" type="submit" onclick="signOut()">Sign out</button>
+        </div>
+        <p id="loginChecker"></p>
+        <script>
+
+            function signOut() {
+                localStorage.removeItem("sessionToken")
+                window.location.reload()
+            }
+
+            const sessionToken = localStorage.getItem("sessionToken")
+            const userCredentials = JSON.parse(localStorage.getItem("userCredentials"))
+
+            if (sessionToken === null) {
+                document.getElementById("homePage").style.display = 'none';
+                document.getElementById("loginChecker").innerHTML = "Error: user is not logged in to the system"
+                document.getElementById("loginChecker").style = {
+                    "font-size": "20px"
+                }
+            } else if (sessionToken !== null) {
+                let currentUser;
+                for (let userCredential of userCredentials) {
+                    if (JSON.stringify(userCredential.sessionToken) === sessionToken) {
+                        currentUser = userCredential;
+                    }
+                }
+                document.getElementById("username").style = "relative"
+                document.getElementById("username").innerHTML = `Welcome to your profile: ${currentUser.username}`
+            }
+        </script>
+    </body>
+</html>

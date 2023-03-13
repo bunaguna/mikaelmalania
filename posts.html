@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <div id="contentHeader">
+            This is a user posts page
+        </div> 
+    </head>
+    <body>
+        <p id="viewChecker"></p>
+        
+    <div id="userContent">
+        <p>
+            Some user posts goes here!
+        </p>
+    </div>
+        <script type="text/javascript">
+            const sessionToken = localStorage.getItem("sessionToken")
+
+            const dateNow = new Date()
+            const validationTime = localStorage.getItem("validUntil")
+
+            if (dateNow.getDate() >  validationTime) {
+                localStorage.removeItem("sessionToken")
+            }
+
+            if (sessionToken === null) {
+                document.getElementById('userContent').style.display = "none";
+                document.getElementById('contentHeader').style.display = "none";
+                document.getElementById('viewChecker').innerHTML = "Sorry! only signed in users can view this page, sign in to continue!"
+            }
+        </script>
+    </body>
+</html>

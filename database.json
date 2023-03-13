@@ -1,0 +1,12 @@
+{
+    "userCredentials": [
+    {
+        "username": "mymail@gmail.com",
+        "password": "123456789"
+    },
+    {
+        "username": "othermail@gmail.com",
+        "password": "987654321"
+    }
+    ]
+}
